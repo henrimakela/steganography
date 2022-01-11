@@ -1,4 +1,6 @@
 from PIL import Image
+from encrypt import encrypt, generateKey, decrypt, loadKey
+from reveal import decode, decodeEncrypted
 
 
 def genData(data):
@@ -39,36 +41,8 @@ def encode(img, message):
         yield pix[6:9]
 
 
-def hide():
-
-    answer = int(
-        input('Select an image: \n 1. Local image \n 2. Image from the web'))
-
-    path = ""
-    message = ""
-    output = ""
-
-    if answer == 1:
-        path = input(
-            'Provide relative image path and file name with file extension \n')
-        output = input(
-            'Provide path and file name with extension for the output file \n'
-        )
-        answer = int(input(
-            'Create the message \n 1. By typing \n 2. From text file'))
-        if answer == 1:
-            message = input("Type message to be encoded\n")
-        elif answer == 2:
-            raise Exception('Not yet implemented')
-        else:
-            raise Exception("Invalid input")
-
-    elif answer == 2:
-        raise Exception('Not yet implemented')
-    else:
-        raise Exception('Invalid input')
-
-    img = Image.open(path)
+def hide(image, message, output):
+    img = Image.open(image)
     modPixels = encode(img, message)
     width = img.size[0]
     x = 0

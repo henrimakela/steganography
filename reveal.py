@@ -1,17 +1,22 @@
 from PIL import Image
+from encrypt import decrypt, loadKey
 
 
-def reveal():
-    path = input("File name and path\n")
-    print(decode(path))
+def decodeEncrypted(image, key):
+    img = Image.open(image)
+    pixels = iter(img.getdata())
+    message = buildMessage(pixels)
+    return decrypt(key, message).decode('utf-8')
 
 
 def decode(image):
     img = Image.open(image)
     pixels = iter(img.getdata())
-    binar = ""
-    message = ""
+    return buildMessage(pixels)
 
+
+def buildMessage(pixels):
+    message = ""
     while(True):
         pixValues = [value for value in pixels.__next__() +
                      pixels.__next__() +
@@ -24,7 +29,6 @@ def decode(image):
                 msgBin += '0'
             else:
                 msgBin += '1'
-        binar += msgBin + " "
         message += chr(int(msgBin, 2))
         if (pixValues[-1] % 2 != 0):
             return message
